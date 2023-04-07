@@ -12,6 +12,5 @@ class Pages extends Model
     protected $fillable = [
         'title',
         'desc',
-        'images',
     ];
 }

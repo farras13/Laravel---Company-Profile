@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pages;
+use Validator;
 use Illuminate\Http\Request;
 
 class PagesController extends Controller
@@ -15,7 +16,8 @@ class PagesController extends Controller
     public function index()
     {
         //get all data
-        $data = Pages::paginate(10);
+        $data['pages'] = Pages::paginate(10);
+        return view('pages.pages', $data);
     }
 
     /**
@@ -26,6 +28,7 @@ class PagesController extends Controller
     public function create()
     {
         //
+        return view('pages.create');
     }
 
     /**
@@ -40,8 +43,20 @@ class PagesController extends Controller
         $data = [
             'title' => $request->title,
             'desc' => $request->desc,
+            'section' => $request->section,
         ];
-        $post = Pages::create($data);
+        // Get the uploaded file
+        $image = $request->file('images');
+        if ($image) {
+            // Generate a unique filename for the image
+            $filename = time() . '-' . $image->getClientOriginalName();
+
+            // Move the uploaded file to a public storage directory
+            $path = $image->storeAs('public/pages', $filename);
+            $data['images'] = $path;
+        }
+        Pages::create($data);
+        return redirect('page');
     }
 
     /**
@@ -63,7 +78,8 @@ class PagesController extends Controller
      */
     public function edit($id)
     {
-        $data = Pages::find($id);
+        $data['data'] = Pages::find($id);
+        return view('pages.edit', $data);
     }
 
     /**
@@ -76,12 +92,35 @@ class PagesController extends Controller
     public function update(Request $request, $id)
     {
         //
-        $post = Pages::findOrFail($id);
-        $data = [
-            'title' => $request->title,
-            'desc' => $request->desc
-        ];
-        $post->save($data);
+        $validator =  Validator::make($request->all(), [
+            'title' => 'required',
+            'desc' => 'required',
+            'images' => 'required|image',
+        ]);
+
+        if ($validator->fails()) {
+            $res = $validator->errors();
+            dd($res);
+        } else {
+            $post = Pages::findOrFail($id);
+            $post->title = $request->title;
+            $post->desc = $request->desc;
+
+            $file = $request->file('images');
+            // cek file
+            if ($file) {
+
+                $filePath = public_path('pages/' . $post->images);
+                if (file_exists($filePath))  unlink($filePath);
+
+                $filename = time() . '-' . $file->getClientOriginalName();
+                $file->move('pages', $filename);
+                $post->images = $filename;
+            }
+            $post->save();
+        }
+
+        return redirect('page');
     }
 
     /**
@@ -94,5 +133,6 @@ class PagesController extends Controller
     {
         $post = Pages::findOrFail($id);
         $post->delete();
+        return redirect('page');
     }
 }

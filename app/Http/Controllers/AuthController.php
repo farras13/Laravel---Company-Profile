@@ -10,6 +10,7 @@ class AuthController extends Controller
 {
     public function index()
     {
+        if(Auth::check()) return redirect('admin');
         return view('login');
     }
 
@@ -46,6 +47,11 @@ class AuthController extends Controller
         }
 
         return back()->with('loginError', 'Login failed');
+    }
+
+    public function logout(){
+        Auth::logout();
+        return redirect('login');
     }
 
 }
