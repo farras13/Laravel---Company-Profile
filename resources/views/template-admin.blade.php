@@ -42,19 +42,25 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/back//index2.html" class="nav-link">
+                            <a href="{{ route('fitur') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Fitur</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/back//index3.html" class="nav-link">
+                            <a href="{{ route('testi') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Kategori</p>
+                                <p>Testimoni</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/back//index3.html" class="nav-link">
+                            <a href="{{ route('services') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Service</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('portofolio') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Portofolio</p>
                             </a>

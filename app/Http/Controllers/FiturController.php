@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Fitur;
-use Illuminate\Contracts\Validation\Validator;
+use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,7 +18,7 @@ class FiturController extends Controller
     {
         //
         $data['fitur'] = Fitur::all();
-        return view('template-admin', $data);
+        return view('fitur.index', $data);
     }
 
     /**
@@ -28,7 +28,7 @@ class FiturController extends Controller
      */
     public function create()
     {
-        //
+        return view('fitur.create');
     }
 
     /**
@@ -43,11 +43,12 @@ class FiturController extends Controller
         $validator =  Validator::make($request->all(), [
             'title' => 'required',
             'desc' => 'required',
-            'images' => 'required|image|size:2048',
+            'images' => 'required|image',
         ]);
 
         if ($validator->fails()) {
             $res = $validator->errors();
+            dd($res);
         } else {
             $data = [
                 'title' => $request->title,
@@ -55,7 +56,7 @@ class FiturController extends Controller
             ];
 
             $file = $request->file('images');
-            $tujuan_upload = 'data_file';
+            $tujuan_upload = 'fitur';
             // cek file
             if (!empty($file)) {
                 $nama_file = time() . "_" . $file->getClientOriginalName();
@@ -64,6 +65,7 @@ class FiturController extends Controller
             }
             $res = Fitur::create($data);
         }
+        redirect()->route('fitur');
     }
 
     /**
@@ -101,7 +103,6 @@ class FiturController extends Controller
         $validator =  Validator::make($request->all(), [
             'title' => 'required',
             'desc' => 'required',
-            'images' => 'required|image|size:2048',
         ]);
 
         if ($validator->fails()) {

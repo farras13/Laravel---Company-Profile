@@ -1,15 +1,15 @@
 @extends('template-admin')
 @section('title')
-    Pages
+    Testimoni
 @endsection
 @section('content')
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Fixed Header Table</h3>
+            <h3 class="card-title">Testimoni Table</h3>
 
             <div class="card-tools">
                 <div class="input-group input-group-sm" style="width: 150px;">
-                    <a href="{{ route('pages.create') }}" class="btn btn-primary">
+                    <a href="{{ route('testi.create') }}" class="btn btn-primary">
                         Tambah Data
                     </a>
                 </div>
@@ -21,29 +21,29 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Section</th>
-                        <th>Title</th>
-                        <th>Desc</th>
+                        <th>Name </th>
+                        <th>Job </th>
+                        <th>Testimoni</th>
                         <th>images</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @if (count($pages) == 0)
+                    @if (count($porto) == 0)
                         <tr>
                             <td colspan="6" class="text-center"> Data anda kosong </td>
                         </tr>
                     @endif
-                    @foreach ($pages as $pk => $p)
+                    @foreach ($porto as $pk => $p)
                         <tr>
                             <td>{{ $pk + 1 }}</td>
-                            <td>{{ $p->section }}</td>
-                            <td>{{ $p->title }}</td>
+                            <td>{{ $p->name }}</td>
+                            <td>{{ $p->job }}</td>
                             <td>{{ strlen($p->desc) > 80 ? substr($p->desc,0,80)."..." : $p->desc;  }}</td>
-                            <td><img src="{{ asset('pages'.'/'.$p->images) }}" alt="" srcset="" width="120px"></td>
+                            <td><img src="{{ asset('testi').'/'.$p->images }}" alt="" srcset="" width="120px"></td>
                             <td>
-                                <a href="{{ url('page/edit').'/'.$p->id }}"> <i class="fa fa-pen"></i> </a>
-                                <a href="{{ url('page/delete').'/'.$p->id }}"> <i class="fa fa-eraser"></i> </a>
+                                <a href="{{ url('testimoni/edit').'/'.$p->id }}"> <i class="fa fa-pen"></i> </a>
+                                <a href="{{ url('testimoni/delete').'/'.$p->id }}"> <i class="fa fa-eraser"></i> </a>
                             </td>
                         </tr>
                     @endforeach

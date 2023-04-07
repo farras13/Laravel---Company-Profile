@@ -1,21 +1,17 @@
 @extends('template-admin')
 @section('title')
-    Pages
+    Service
 @endsection
 @section('content')
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Pages Create</h3>
+            <h3 class="card-title">Service Create</h3>
         </div>
         <!-- /.card-header -->
         <div class="card-body table-responsive p-0" style="height: 400px;">
-            <form action="{{ url('page/store') }}" method="post" enctype="multipart/form-data">
+            <form action="{{ url('service/store') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="card-body">
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Section Pages</label>
-                        <input type="text" class="form-control" id="inputSection" name="section" placeholder="Enter Section Pages">
-                    </div>
                     <div class="form-group">
                         <label for="exampleInputEmail1">Title Pages</label>
                         <input type="text" class="form-control" id="inputtitle" name="title" placeholder="Enter Title Pages">
@@ -40,8 +36,6 @@
                 <!-- /.card-body -->
                 <div class="card-footer">
                     <button type="submit" class="btn btn-primary">Submit</button>
-                    <a href="{{ url()->previous() }}" class="btn btn-danger">cancel</a>
-
                 </div>
             </form>
         </div>

@@ -2,22 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pages;
-use Validator;
+use App\Models\Portofolio;
 use Illuminate\Http\Request;
+use Validator;
 
-class PagesController extends Controller
+class PortofolioController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         //get all data
-        $data['pages'] = Pages::paginate(10);
-        return view('pages.pages', $data);
+        $data['porto'] = Portofolio::paginate(10);
+        return view('portofolio.index', $data);
     }
 
     /**
@@ -28,7 +23,7 @@ class PagesController extends Controller
     public function create()
     {
         //
-        return view('pages.create');
+        return view('portofolio.create');
     }
 
     /**
@@ -42,19 +37,19 @@ class PagesController extends Controller
         //
         $data = [
             'title' => $request->title,
+            'tags' => $request->tags,
             'desc' => $request->desc,
-            'section' => $request->section,
         ];
         // Get the uploaded file
         $file = $request->file('images');
         if ($file) {
             // Generate a unique filename for the image
             $filename = time() . '-' . $file->getClientOriginalName();
-            $file->move('pages', $filename);
+            $file->move('portofolio', $filename);
             $data['images'] = $filename;
         }
-        Pages::create($data);
-        return redirect('page');
+        Portofolio::create($data);
+        return  redirect('portofolios');
     }
 
     /**
@@ -65,7 +60,7 @@ class PagesController extends Controller
      */
     public function show($id)
     {
-        $data = Pages::find($id);
+        $data = Portofolio::find($id);
     }
 
     /**
@@ -76,8 +71,8 @@ class PagesController extends Controller
      */
     public function edit($id)
     {
-        $data['data'] = Pages::find($id);
-        return view('pages.edit', $data);
+        $data['data'] = Portofolio::find($id);
+        return view('portofolio.edit', $data);
     }
 
     /**
@@ -92,6 +87,7 @@ class PagesController extends Controller
         //
         $validator =  Validator::make($request->all(), [
             'title' => 'required',
+            'tags' => 'required',
             'desc' => 'required',
         ]);
 
@@ -99,25 +95,26 @@ class PagesController extends Controller
             $res = $validator->errors();
             dd($res);
         } else {
-            $post = Pages::findOrFail($id);
+            $post = Portofolio::findOrFail($id);
             $post->title = $request->title;
+            $post->tags = $request->tags;
             $post->desc = $request->desc;
 
             $file = $request->file('images');
             // cek file
             if ($file) {
 
-                $filePath = public_path('pages/' . $post->images);
+                $filePath = public_path('portofolio/' . $post->images);
                 if (file_exists($filePath))  unlink($filePath);
 
                 $filename = time() . '-' . $file->getClientOriginalName();
-                $file->move('pages', $filename);
+                $file->move('portofolio', $filename);
                 $post->images = $filename;
             }
             $post->save();
         }
 
-        return redirect('page');
+        return  redirect('portofolios');
     }
 
     /**
@@ -128,8 +125,8 @@ class PagesController extends Controller
      */
     public function destroy($id)
     {
-        $post = Pages::findOrFail($id);
+        $post = Portofolio::findOrFail($id);
         $post->delete();
-        return redirect('page');
+        return  redirect('portofolios');
     }
 }

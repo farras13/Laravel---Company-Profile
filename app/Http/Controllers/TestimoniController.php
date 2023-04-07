@@ -2,22 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pages;
-use Validator;
+use App\Models\Testimoni;
 use Illuminate\Http\Request;
+use Validator;
 
-class PagesController extends Controller
+class TestimoniController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         //get all data
-        $data['pages'] = Pages::paginate(10);
-        return view('pages.pages', $data);
+        $data['porto'] = Testimoni::paginate(10);
+        return view('testimoni.index', $data);
     }
 
     /**
@@ -28,7 +23,7 @@ class PagesController extends Controller
     public function create()
     {
         //
-        return view('pages.create');
+        return view('testimoni.create');
     }
 
     /**
@@ -41,20 +36,20 @@ class PagesController extends Controller
     {
         //
         $data = [
-            'title' => $request->title,
+            'name' => $request->name,
+            'job' => $request->job,
             'desc' => $request->desc,
-            'section' => $request->section,
         ];
         // Get the uploaded file
         $file = $request->file('images');
         if ($file) {
             // Generate a unique filename for the image
             $filename = time() . '-' . $file->getClientOriginalName();
-            $file->move('pages', $filename);
+            $file->move('testi', $filename);
             $data['images'] = $filename;
         }
-        Pages::create($data);
-        return redirect('page');
+        Testimoni::create($data);
+        return  redirect()->route('testi');
     }
 
     /**
@@ -65,7 +60,7 @@ class PagesController extends Controller
      */
     public function show($id)
     {
-        $data = Pages::find($id);
+        $data = Testimoni::find($id);
     }
 
     /**
@@ -76,8 +71,8 @@ class PagesController extends Controller
      */
     public function edit($id)
     {
-        $data['data'] = Pages::find($id);
-        return view('pages.edit', $data);
+        $data['data'] = Testimoni::find($id);
+        return view('testimoni.edit', $data);
     }
 
     /**
@@ -91,7 +86,8 @@ class PagesController extends Controller
     {
         //
         $validator =  Validator::make($request->all(), [
-            'title' => 'required',
+            'name' => 'required',
+            'job' => 'required',
             'desc' => 'required',
         ]);
 
@@ -99,8 +95,9 @@ class PagesController extends Controller
             $res = $validator->errors();
             dd($res);
         } else {
-            $post = Pages::findOrFail($id);
-            $post->title = $request->title;
+            $post = Testimoni::findOrFail($id);
+            $post->name = $request->name;
+            $post->job = $request->job;
             $post->desc = $request->desc;
 
             $file = $request->file('images');
@@ -117,7 +114,7 @@ class PagesController extends Controller
             $post->save();
         }
 
-        return redirect('page');
+        return  redirect()->route('testi');
     }
 
     /**
@@ -128,8 +125,8 @@ class PagesController extends Controller
      */
     public function destroy($id)
     {
-        $post = Pages::findOrFail($id);
+        $post = Testimoni::findOrFail($id);
         $post->delete();
-        return redirect('page');
+        return  redirect()->route('testi');
     }
 }

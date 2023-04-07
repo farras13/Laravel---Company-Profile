@@ -5,13 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Pages extends Model
+class Testimoni extends Model
 {
     use HasFactory;
-
     protected $fillable = [
-        'section',
-        'title',
+        'name',
+        'job',
         'desc',
         'images',
     ];

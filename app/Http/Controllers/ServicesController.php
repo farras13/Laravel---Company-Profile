@@ -2,22 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pages;
-use Validator;
+use App\Models\Services;
 use Illuminate\Http\Request;
+use Validator;
 
-class PagesController extends Controller
+class ServicesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         //get all data
-        $data['pages'] = Pages::paginate(10);
-        return view('pages.pages', $data);
+        $data['service'] = Services::paginate(10);
+        return view('services.index', $data);
     }
 
     /**
@@ -28,7 +23,7 @@ class PagesController extends Controller
     public function create()
     {
         //
-        return view('pages.create');
+        return view('services.create');
     }
 
     /**
@@ -43,18 +38,17 @@ class PagesController extends Controller
         $data = [
             'title' => $request->title,
             'desc' => $request->desc,
-            'section' => $request->section,
         ];
         // Get the uploaded file
         $file = $request->file('images');
         if ($file) {
             // Generate a unique filename for the image
             $filename = time() . '-' . $file->getClientOriginalName();
-            $file->move('pages', $filename);
+            $file->move('service', $filename);
             $data['images'] = $filename;
         }
-        Pages::create($data);
-        return redirect('page');
+        Services::create($data);
+        return  redirect('services');
     }
 
     /**
@@ -65,7 +59,7 @@ class PagesController extends Controller
      */
     public function show($id)
     {
-        $data = Pages::find($id);
+        $data = Services::find($id);
     }
 
     /**
@@ -76,8 +70,8 @@ class PagesController extends Controller
      */
     public function edit($id)
     {
-        $data['data'] = Pages::find($id);
-        return view('pages.edit', $data);
+        $data['data'] = Services::find($id);
+        return view('services.edit', $data);
     }
 
     /**
@@ -99,7 +93,7 @@ class PagesController extends Controller
             $res = $validator->errors();
             dd($res);
         } else {
-            $post = Pages::findOrFail($id);
+            $post = Services::findOrFail($id);
             $post->title = $request->title;
             $post->desc = $request->desc;
 
@@ -117,7 +111,7 @@ class PagesController extends Controller
             $post->save();
         }
 
-        return redirect('page');
+        return  redirect('services');
     }
 
     /**
@@ -128,8 +122,8 @@ class PagesController extends Controller
      */
     public function destroy($id)
     {
-        $post = Pages::findOrFail($id);
+        $post = Services::findOrFail($id);
         $post->delete();
-        return redirect('page');
+        return  redirect('services');
     }
 }
